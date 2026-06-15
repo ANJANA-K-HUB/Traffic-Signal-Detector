@@ -1,0 +1,10 @@
+# Dataset Root Path
+path: ./dataset  
+
+# Training and Validation Sub-paths
+train: train/images 
+val: val/images
+
+# Class Configuration
+nc: 3  # number of classes
+names: ['Red Light', 'Yellow Light', 'Green Light']
