@@ -13,13 +13,13 @@ class DetectionPipeline:
         cap = cv2.VideoCapture(video_src)
 
         if not cap.isOpened():
-            print(f"❌ Error: Cannot open video source {video_src}")
+            print(f" Error: Cannot open video source {video_src}")
             return
         
         cv2.namedWindow("Smart Traffic Signal Assistant", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("Smart Traffic Signal Assistant", 800, 600)
 
-        print("🚀 Starting real-time detection pipeline. Press 'q' to exit.")
+        print(" Starting real-time detection pipeline. Press 'q' to exit.")
 
         while cap.isOpened():
             ret, frame = cap.read()
@@ -41,7 +41,7 @@ class DetectionPipeline:
                     cls_id = int(box.cls[0])
                     conf_score = float(box.conf[0])
                     
-                    # 🧠 Data Science Guardrail: Correct the model if it hallucinates "Red"
+                    # Data Science Guardrail: Correct the model if it hallucinates "Red"
                     if cls_id == 0:  
                         crop = frame[y1:y2, x1:x2]
                         if crop.size > 0:
@@ -84,4 +84,4 @@ class DetectionPipeline:
 
         cap.release()
         cv2.destroyAllWindows()
-        print("🏁 Video pipeline finished successfully.")
+        print(" Video pipeline finished successfully.")

@@ -13,4 +13,4 @@ for file in os.listdir(LABELS_DIR):
                     if cls_id in counts:
                         counts[cls_id] += 1
 
-print(f"📊 Dataset Class Count:\n🔴 Red Lights (0): {counts[0]}\n🟡 Yellow Lights (1): {counts[1]}\n🟢 Green Lights (2): {counts[2]}")
+print(f" Dataset Class Count:\n Red Lights (0): {counts[0]}\n Yellow Lights (1): {counts[1]}\n Green Lights (2): {counts[2]}")
