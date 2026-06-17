@@ -1,19 +1,25 @@
+import os
 from ultralytics import YOLO
 
-def train_model():
-    print("Initializing YOLOv8 Nano Model...")
-    # Load a pre-trained YOLOv8 nano model (lightweight & fast)
+def main():
+    # Load a fresh, lightweight pretrained YOLOv8 nano model
     model = YOLO("yolov8n.pt") 
-    
-    print("Starting training process...")
-    # Train the model using our custom dataset config
+
+    #  Automatically find the absolute path to your local data.yaml config
+    yaml_path = os.path.join(os.getcwd(), "TrafficLightData", "data.yaml")
+
+    print(f"\nStarting training using data configuration: {yaml_path}\n")
+
+    # Train the model 
     model.train(
-        data="data.yaml", 
-        epochs=50,       # Number of training rounds (adjust based on time/accuracy needs)
-        imgsz=640,       # Standard YOLO image resolution
-        device="cpu"     # Uses CPU. Change to 0 or 'cuda' if you have an NVIDIA GPU setup
+        data=yaml_path,
+        epochs=40,         
+        imgsz=640,         
+        batch=16,          
+        device=0,          
+        workers=2,         
+        augment=True       
     )
-    print("Training complete! Weights saved to: runs/detect/train/weights/best.pt")
 
 if __name__ == "__main__":
-    train_model()
+    main()

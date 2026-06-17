@@ -1,18 +1,20 @@
-import yaml
-from src.model import TrafficModel
-from src.pipeline import DetectionPipeline
+import sys
+from src.pipeline import TrafficLightPipeline
 
 def main():
-    # Load configuration parameters
-    with open("config.yaml", "r") as f:
-        config = yaml.safe_load(f)
-
-    # Initialize components
-    model = TrafficModel(weights_path=config['model']['weights_path'])
-    pipeline = DetectionPipeline(model=model, config=config)
-
-    # Run pipeline
-    pipeline.run()
+    print("Initializing Balanced Traffic Light Detection System...")
+    
+    try:
+        # Initialize the processing pipeline with your configuration settings
+        pipeline = TrafficLightPipeline(config_path="config.yaml")
+        
+        print("Starting video frame-by-frame inference pipeline...")
+        pipeline.process_video()
+        
+        print("Video processing completed successfully! Check your configured output path.")
+        
+    except Exception as e:
+        print(f"An error occurred during pipeline execution: {e}", file=sys.stderr)
 
 if __name__ == "__main__":
     main()

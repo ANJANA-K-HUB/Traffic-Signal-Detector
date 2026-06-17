@@ -1,13 +1,9 @@
 model:
   weights_path: "weights/best.pt"
-  confidence_threshold: 0.5
-  img_size: 416
+  confidence_threshold: 0.25
+  img_size: 960
 
 video:
-  source_path: "traffic_test.mp4"
-  output_path: "output_detected.mp4"
+  source_path: "Data/test_videos/test 1.mp4"
+  output_path: "output_test_1.mp4"
   show_window: true
-
-alerts:
-  font_scale: 1.0
-  thickness: 2

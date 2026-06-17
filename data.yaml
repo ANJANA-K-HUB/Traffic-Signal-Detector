@@ -1,10 +1,6 @@
-# Dataset Root Path
-path: ./dataset  
+train: TrafficLightData/train/images
+val: TrafficLightData/valid/images
+test: TrafficLightData/test/images
 
-# Training and Validation Sub-paths
-train: train/images 
-val: val/images
-
-# Class Configuration
-nc: 3  # number of classes
-names: ['Red Light', 'Yellow Light', 'Green Light']
+nc: 3
+names: ['green', 'red', 'yellow']
