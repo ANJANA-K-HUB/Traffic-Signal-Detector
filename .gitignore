@@ -7,9 +7,13 @@ src/__pycache__/
 # Large Datasets and Media
 dataset/
 dataset.zip
+TrafficLightData.zip
+*.zip
 *.mp4
 
 # AI weights checkpoints
 weights/best.pt
 runs/
 *.pt
+
+TrafficLightData/
