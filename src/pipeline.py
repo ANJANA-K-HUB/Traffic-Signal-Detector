@@ -3,6 +3,7 @@ import os
 import yaml
 import ffmpeg
 import shutil
+import datetime
 from ultralytics import YOLO
 
 class TrafficLightPipeline:
@@ -15,35 +16,45 @@ class TrafficLightPipeline:
         self.output_path = self.config['video']['output_path']
         self.conf_threshold = self.config['model']['confidence_threshold']
         
-        # THIS IS THE MISSING PART:
-        self.final_status = "Scanning..." 
+        # This is the attribute that was missing!
+        self.status_history = [] 
 
     def process_video(self):
+        # Generate a unique output path
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        unique_filename = f"output_{timestamp}.mp4"
+        self.output_path = os.path.join(os.path.dirname(self.output_path), unique_filename)
+        
         cap = cv2.VideoCapture(self.source_path)
         fps = cap.get(cv2.CAP_PROP_FPS) or 25
         
         temp_dir = "temp_frames"
         os.makedirs(temp_dir, exist_ok=True)
         
-        print("Processing frames...")
+        last_recorded_status = None
         count = 0
+        
         while cap.isOpened():
             success, frame = cap.read()
-            if not success: break
+            if not success: 
+                break
             
             results = self.model(frame, conf=self.conf_threshold, verbose=False)
             
-            # Logic: Update the attribute
             if results[0].boxes:
                 class_id = int(results[0].boxes[0].cls)
-                self.final_status = "STOP (Red)" if class_id == 0 else "GO (Green)"
+                current_status = "STOP (Red)" if class_id == 0 else "GO (Green)"
+                
+                if current_status != last_recorded_status:
+                    time_sec = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000
+                    self.status_history.append({"time": round(time_sec, 2), "status": current_status})
+                    last_recorded_status = current_status
             
             cv2.imwrite(f"{temp_dir}/frame_{count:05d}.jpg", results[0].plot())
             count += 1
             
         cap.release()
 
-        # Finalize video
         try:
             (ffmpeg.input(f'{temp_dir}/frame_%05d.jpg', framerate=fps)
              .output(self.output_path, vcodec='libx264', pix_fmt='yuv420p', crf=23)
