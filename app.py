@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import yaml
 import shutil
-from src.pipeline import TrafficLightPipeline
+from src.pipeline_new import TrafficLightPipeline
 
 # Page Setup
 st.set_page_config(layout="wide")

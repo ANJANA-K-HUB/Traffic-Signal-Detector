@@ -1,5 +1,5 @@
 import sys
-from src.pipeline import TrafficLightPipeline
+from src.pipeline_new import TrafficLightPipeline
 
 def main():
     print("Initializing Balanced Traffic Light Detection System...")
