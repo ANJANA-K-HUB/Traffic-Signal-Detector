@@ -6,6 +6,7 @@ import shutil
 import datetime
 from ultralytics import YOLO
 
+print("--- DEBUG: pipeline.py is being loaded ---")
 class TrafficLightPipeline:
     def __init__(self, config_path="config.yaml"):
         with open(config_path, 'r') as file:
@@ -18,6 +19,7 @@ class TrafficLightPipeline:
         
         # This is the attribute that was missing!
         self.status_history = [] 
+      
 
     def process_video(self):
         # Generate a unique output path
@@ -38,12 +40,23 @@ class TrafficLightPipeline:
             success, frame = cap.read()
             if not success: 
                 break
-            
+           
             results = self.model(frame, conf=self.conf_threshold, verbose=False)
             
             if results[0].boxes:
                 class_id = int(results[0].boxes[0].cls)
-                current_status = "STOP (Red)" if class_id == 0 else "GO (Green)"
+                
+                if class_id == 0:
+                    current_status = "STOP (Red)"
+                elif class_id == 1:
+                    current_status = "GO (Green)"
+                elif class_id == 2:
+                    current_status = "CAUTION (Yellow)"
+                else:
+                    current_status = "Unknown"
+            # ----------------------------------------
+                
+
                 
                 if current_status != last_recorded_status:
                     time_sec = cap.get(cv2.CAP_PROP_POS_MSEC) / 1000

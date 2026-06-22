@@ -2,11 +2,11 @@ import streamlit as st
 import os
 import yaml
 import shutil
-from src.pipeline_new import TrafficLightPipeline
+from src.pipeline import TrafficLightPipeline
 
 # Page Setup
 st.set_page_config(layout="wide")
-st.title("🚦 Balanced Traffic Light Detection System")
+st.title("🚦Traffic Light Detection System")
 
 # Load Config
 config_path = "config.yaml"
@@ -28,8 +28,11 @@ with col1:
         st.success("File uploaded successfully!")
 
     if st.button("🚀 Execute Detection Pipeline"):
+        
+
         with st.spinner("Processing video..."):
             pipeline = TrafficLightPipeline(config_path=config_path)
+            # We modify the process_video function to accept the placeholder
             pipeline.process_video()
             
             # Persist data
@@ -39,7 +42,7 @@ with col1:
 
 # Col 2: Display
 with col2:
-    st.subheader("📊 Analytical Output Display")
+    st.subheader("📊 Output Display")
     
     # Check if pipeline data exists in session
     pipeline = st.session_state.get('pipeline')
@@ -49,7 +52,14 @@ with col2:
         # 1. Display Timeline Alerts
         st.info("### 🕒 Detection Timeline")
         for event in pipeline.status_history:
-            status_icon = "🚨" if "STOP" in event['status'] else "✅"
+            # Replaced binary logic with full ternary state evaluation
+            if "STOP" in event['status']:
+                status_icon = "🚨"
+            elif "CAUTION" in event['status']:
+                status_icon = "⚠️"
+            else:
+                status_icon = "✅"
+                
             st.write(f"⏱️ **{event['time']}s**: {status_icon} {event['status']}")
         
         # 2. Display Processed Video
